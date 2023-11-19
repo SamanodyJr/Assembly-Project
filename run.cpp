@@ -4,74 +4,101 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
+#include <map>
 #include "R-Format.hpp"
+#include "I-Format.hpp"
+
 using namespace std;
-void check_format(string inst, string destintation, string source1, string source2, vector<pair<string, int>> reg) // name , string
+void check_format(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, map <int , string> memory, bool &pc_changed) // name , string
 {
-    int x;
-    if (inst == "add" || inst == "sub" || inst == "srl" || inst == "sll" || inst == "xor" || inst == "and" || inst == "or") //if( rformt =)
-        //d,s,s
-         x=RFormat(inst, destintation, source1, source2, reg);
-    //if(iformat)
-    // d,s,im
-    //x=
-    cout << " ans is " << x << endl;
-};
+
+//     if (IFormat_Checker(inst)) //if( rformt =)
+//     {
+// //         IFormat( inst, inst_rest, reg, pc, pc_changed , memory);
+//     }
+ 
+}
 int main()
-{
+{   
+    int pc;
     int ans(1);
     string filepath,inst;
-    vector<pair<string, int>> reg =
-    {
-        {"Zero",0}, {"ra",0}, {"sp",34359672828},{"gp",268468224},{"tp",0},{"t0",0},{"t1",0},{"t2",0},{"s0",0},{"s1",0},{"a0",0},{"a1",0},{"a2",0},{"a3",0}, {"a4",0},
-
-         {"a5",0},{"a6",0},{"a7",0},{"s2",0},{"s3",0},{"s4",0},{"s5",0}, {"s6",0},{"s7",0},{"s8",0}, {"s9",0}, {"s10",0}, {"s11",0},{"t3",0}, {"t4",0},{"t5",0},{"t6",0},
-         {"pc",4194304}
-
-    };
+    vector<pair<string, int> > reg ;
+    reg.push_back(make_pair("Zero",0)); reg.push_back(make_pair("ra",0)); reg.push_back(make_pair("sp",34359672828)); 
+    reg.push_back(make_pair("gp",268468224)); reg.push_back(make_pair("tp",0)); reg.push_back(make_pair("t0",0)); 
+    reg.push_back(make_pair("t1",0)); reg.push_back(make_pair("t2",0)); reg.push_back(make_pair("s0",0)); 
+    reg.push_back(make_pair("s1",0)); reg.push_back(make_pair("a0",0)); reg.push_back(make_pair("a1",0)); 
+    reg.push_back(make_pair("a2",0)); reg.push_back(make_pair("a3",0)); reg.push_back(make_pair("a4",0)); 
+    reg.push_back(make_pair("a5",0)); reg.push_back(make_pair("a6",0)); reg.push_back(make_pair("a7",0)); 
+    reg.push_back(make_pair("s2",0)); reg.push_back(make_pair("s3",0)); reg.push_back(make_pair("s4",0)); 
+    reg.push_back(make_pair("s5",0)); reg.push_back(make_pair("s6",0)); reg.push_back(make_pair("s7",0)); 
+    reg.push_back(make_pair("s8",0)); reg.push_back(make_pair("s9",0)); reg.push_back(make_pair("s10",0)); 
+    reg.push_back(make_pair("s11",0)); reg.push_back(make_pair("t3",0)); reg.push_back(make_pair("t4",0)); 
+    reg.push_back(make_pair("t5",0)); reg.push_back(make_pair("t6",0));
     do 
     {
 
     cout << "~~~~~~~~~~~~~~~~~~Welcome to your RISC-V simulator~~~~~~~~~~~~~~~~ \n\n";
-    cout << "\t\tHow would you like to input your data\n\n"
-         << "\t\t  1. Instruction by Instruction\n\t\t  2. Read from an exisisting file\n\t\t  3. Exit\n" ;
+    cout << "\t\tWhat would you like to do?\n\n"
+         << "\t\t  1. Read from an exisisting file\n\t\t  2. Exit\n" ;
 
-    if( ans < 1 || ans > 3)
+    if( ans < 1 || ans > 2)
     {
         cout << "invalid number entered try again \n";
     }
     cout << "option:";
     cin >> ans;
     
-    }while(ans > 3 || ans < 1);
+    }while(ans > 2 || ans < 1);
 
     if (ans == 1)
     { 
-        do{
-            cout << "write your instructions and write 0 when you are done: \n";
-            cin >> inst;
-           // stringstream instruction(inst);
-           // string store;
-            // take the first string only -> name ,
-            // the rest hwa el x1x2x3
-            /*vector <string> temp;
-            while (instruction >> store) {
-                store.erase(remove(store.begin(), store.end(), ' '), store.end());
-                store.erase(remove(store.begin(), store.end(), ','), store.end());
-                temp.push_back(store);
-            }
-            check_format(temp[0], temp[1], temp[2], temp[3], reg);
-            //display mem , reg , ect.*/
-
-        }while(inst != "0");
-
-
-    }
-    else if(ans ==2)
-    {
+        map < int , int > memory;
+        int END(824);
+        int tempPC, memadd, memvalue; 
+        string mem;
+        
         cout << "enter your file path\n";
         cin >> filepath;
-       
+
+        cout << "enter your starting PC\n";
+        cin >> pc;
+
+        cout << "Do you want to initialize your memory ? yes/Yes \n";
+        cin >> mem ;
+
+        while (mem == "yes" || mem == "Yes")
+        {
+            cout << "enter the memory address: ";
+            cin >> memadd;
+            cout << "enter the corresponding memory value: ";
+            cin >> memvalue;
+
+            memory[memadd] = memvalue ;
+
+            cout << "Do you want to initialize another thing in your memory? yes/Yes \n";
+            cin >> mem;
+        }
+        // map< int, string > inst;
+
+        // //call the function 
+        // tempPC = pc;
+        // stringstream instruction(inst[tempPC]);
+        // string store;
+
+        // vector <string> temp;
+        // store.erase(remove(store.begin(), store.end(), ' '), store.end());
+        // while (instruction >> store) {
+        //     store.erase(remove(store.begin(), store.end(), ','), store.end());
+        //     temp.push_back(store);
+        //     break;
+        // }
+        // string concat;
+        // concat = inst[tempPC];
+        // int i = concat.find(temp[0]);
+        // concat.erase(i,temp[0].length());
+        // check_format(temp[0], concat, reg);
+        // tempPC += 4;
 
     }
     else

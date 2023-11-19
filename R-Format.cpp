@@ -2,7 +2,7 @@
 #include <vector>
 #include "R-Format.hpp"
 using namespace std;
-int RFormat(string inst, string destination, string source1, string source2, vector<pair<string, int>> reg)
+int RFormat(string inst, string destination, string source1, string source2, vector<pair<string, int> > reg)
 {
 	// name inst 
 	//substring 
