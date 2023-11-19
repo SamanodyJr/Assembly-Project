@@ -2,11 +2,9 @@
 #include <vector>
 #include "R-Format.hpp"
 using namespace std;
-<<<<<<< HEAD
-int RFormat(string inst, string destination, string source1, string source2, vector<pair<string, int> > reg)
-=======
+
+
 void RFormat(string inst, string destination, string source1, string source2, vector<pair<string, int>> reg)
->>>>>>> refs/remotes/origin/main
 {
 	// name inst 
 	//substring 
