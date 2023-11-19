@@ -11,6 +11,7 @@
 using namespace std;
 void check_format(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, map <int , string> memory, bool &pc_changed) // name , string
 {
+<<<<<<< HEAD
 
 //     if (IFormat_Checker(inst)) //if( rformt =)
 //     {
@@ -18,6 +19,17 @@ void check_format(string inst, string inst_rest, vector<pair<string, int> > reg,
 //     }
  
 }
+=======
+    int x;
+    if (inst == "add" || inst == "sub" || inst == "srl" || inst == "sll" || inst == "xor" || inst == "and" || inst == "or") //if( rformt =)
+        //d,s,s
+         RFormat(inst, destintation, source1, source2, reg);
+    //if(iformat)
+    // d,s,im
+    //x=
+    //cout << " ans is " << x << endl;
+};
+>>>>>>> refs/remotes/origin/main
 int main()
 {   
     int pc;

@@ -2,7 +2,11 @@
 #include <vector>
 #include "R-Format.hpp"
 using namespace std;
+<<<<<<< HEAD
 int RFormat(string inst, string destination, string source1, string source2, vector<pair<string, int> > reg)
+=======
+void RFormat(string inst, string destination, string source1, string source2, vector<pair<string, int>> reg)
+>>>>>>> refs/remotes/origin/main
 {
 	// name inst 
 	//substring 
@@ -38,6 +42,32 @@ int RFormat(string inst, string destination, string source1, string source2, vec
 			reg[d].second = reg[s1].second | reg[s2].second;
 		else if (inst == "xor")
 			reg[d].second = reg[s1].second ^ reg[s2].second;
+		else if (inst == "sra")
+			reg[d].second = reg[s1].second >> reg[s2].second;
+		else if (inst == "slt")
+		{
+			if (reg[s1].second < reg[s2].second)
+				reg[d].second = 0;
+			else
+				reg[d].second = 1;
+
+		}
+		else if (inst == "sltu")
+		{
+			if (reg[s1].second >= 0 && reg[s2].second>=0)
+				if(reg[s1].second < reg[s2].second)
+					reg[d].second = 1;
+				else
+					reg[d].second = 0;
+			else if(reg[s1].second >= 0 && reg[s2].second < 0)
+				reg[d].second = 1;
+			else if (reg[s1].second < 0 && reg[s2].second < 0)
+				if (reg[s1].second < reg[s2].second)
+					reg[d].second = 1;
+				else
+					reg[d].second = 0;
+			else if (reg[s1].second < 0 && reg[s2].second >= 0)
+				reg[d].second = 0;
+		}
 	}
-	return reg[d].second;
 }
