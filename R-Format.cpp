@@ -4,6 +4,9 @@
 using namespace std;
 int RFormat(string inst, string destination, string source1, string source2, vector<pair<string, int>> reg)
 {
+	// name inst 
+	//substring 
+	//
 	int d = -1, s1 = -1, s2 = -1;
 	for (size_t i = 0; i < reg.size(); ++i) {
 		if (reg[i].first == destination) {
