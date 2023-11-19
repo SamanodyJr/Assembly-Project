@@ -1,21 +1,30 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-
+#include <vector>
+#include <sstream>
+#include <algorithm>
+#include "R-Format.hpp"
 using namespace std;
-
+void check_format(string inst, string destintation, string source1, string source2, vector<pair<string, int>> reg)
+{
+    int x;
+    if (inst == "add" || inst == "sub" || inst == "srl" || inst == "sll" || inst == "xor" || inst == "and" || inst == "or")
+         x=RFormat(inst, destintation, source1, source2, reg);
+    cout << " ans is " << x << endl;
+};
 int main()
 {
     int ans(1);
-    string instruction, filepath;
-    vector<string<int>> reg =
+    string filepath,inst;
+    vector<pair<string, int>> reg =
     {
         {"Zero",0}, {"ra",0}, {"sp",34359672828},{"qp",268468224},{"tp",0},{"t0",0},{"t1",0},{"t2",0},{"s0",0},{"s1",0},{"a0",0},{"a1",0},{"a2",0},{"a3",0}, {"a4",0},
-        
+
          {"a5",0},{"a6",0},{"a7",0},{"s2",0},{"s3",0},{"s4",0},{"s5",0}, {"s6",0},{"s7",0},{"s8",0}, {"s9",0}, {"s10",0}, {"s11",0},{"t3",0}, {"t4",0},{"t5",0},{"t6",0},
          {"pc",4194304}
 
-    }
+    };
     do 
     {
 
@@ -36,12 +45,21 @@ int main()
     { 
         do{
             cout << "write your instructions and write 0 when you are done: \n";
-            cin >> instruction;
-            //substring
-            //checkfoormat
+            cin >> inst;
+            stringstream instruction(inst);
+            string store;
+            vector <string> temp;
+            while (instruction >> store) {
+                store.erase(remove(store.begin(), store.end(), ' '), store.end());
+                store.erase(remove(store.begin(), store.end(), ','), store.end());
+                temp.push_back(store);
+            }
+            check_format(temp[0], temp[1], temp[2], temp[3], reg);
             //display mem , reg , ect.
 
-        }while(instruction != "0");
+        }while(inst != "0");
+
+
     }
     else if(ans ==2)
     {
