@@ -81,9 +81,9 @@ string removing_comments(string line)
 	if (found != string::npos)
 	{
 		int i = 0;
-		while (line[i + 1] != '#')
+		while (line[i] != '#')
 		{
-			new_line += line;
+			new_line += line[i];
 			i++;
 		}
 
@@ -99,9 +99,9 @@ string storing_label(string line)
 	if (found != string::npos)
 	{
 		int i = 0;
-		while (line[i + 1] != ':')
+		while (line[i] != ':')
 		{
-			new_line += line;
+			new_line += line[i];
 			i++;
 		}
 
@@ -112,10 +112,13 @@ string storing_label(string line)
 }
 int Intializing_Data(string filepath, int pc, map< int, string> &instructions, map<string, int> &labels)
 {
+	//C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
 	cout << "tab\n";
-	ifstream input("input.asm");
+	ifstream input(filepath);
+	
+
 	string line;
-	string label;
+	string label="";
 	if (input.is_open())
 	{
 		cout << "eeeeeeehhhh \n";
@@ -131,16 +134,15 @@ int Intializing_Data(string filepath, int pc, map< int, string> &instructions, m
 		{
 			cout << "baaa2";
 			int i = 0;
-			while (line[i + 1] != ':')
+			while (line[i] != ':')
 			{
-				label += line;
+				label += line[i];
 				i++;
 			}
 			labels[label] = pc;
 			getline(input, line);
 			line = removing_comments(line);
-			instructions[pc] = label;
-			pc += 4;
+			instructions[pc] = line;
 			while (!input.eof())
 			{
 				cout << "baaa3";
@@ -164,10 +166,11 @@ int Intializing_Data(string filepath, int pc, map< int, string> &instructions, m
 	}
 	input.close();
 	int end = pc;
+	cout << " label\n";
 	for (const auto& pair : labels) {
 		cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
 	}
-
+	cout <<  " instructions\n";
 	for (const auto& pair : instructions) {
 		cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
 	}

@@ -15,4 +15,4 @@ L1:
       lw   ra, 4(sp) # and return address
       addi sp, sp, 8 # pop 2 items from stack
       mul  a0, a0, t0 # multiply to get result
-      jalr zero, 0(ra) # and return
+      jalr zero, 0(ra) # and return
