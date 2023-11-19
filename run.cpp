@@ -11,11 +11,11 @@ void check_format(string inst, string destintation, string source1, string sourc
     int x;
     if (inst == "add" || inst == "sub" || inst == "srl" || inst == "sll" || inst == "xor" || inst == "and" || inst == "or") //if( rformt =)
         //d,s,s
-         x=RFormat(inst, destintation, source1, source2, reg);
+         RFormat(inst, destintation, source1, source2, reg);
     //if(iformat)
     // d,s,im
     //x=
-    cout << " ans is " << x << endl;
+    //cout << " ans is " << x << endl;
 };
 int main()
 {
