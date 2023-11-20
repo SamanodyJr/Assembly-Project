@@ -3,6 +3,10 @@
         "iosfwd": "cpp",
         "string": "cpp",
         "iostream": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "filesystem": "cpp",
+        "map": "cpp",
+        "vector": "cpp",
+        "algorithm": "cpp"
     }
 }

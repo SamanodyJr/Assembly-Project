@@ -4,7 +4,7 @@
 using namespace std;
 
 
-void RFormat(string inst, string destination, string source1, string source2, vector<pair<string, int>> reg)
+void RFormat(string inst, string destination, string source1, string source2, vector<pair<string, int> > reg)
 {
 	// name inst 
 	//substring 

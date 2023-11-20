@@ -7,15 +7,15 @@
 
 using namespace std;
 
-bool IFormat_Checker(string inst)
+bool IFormatChecker(string inst)
 {
-    if(inst == "jarl" || inst == "lb" || inst == "lh" || inst == "lw" || inst == "lbu" || inst == "lhu" || inst == "addi" || inst == "slti" || inst == "sltiu" || inst == "xori" || inst == "ori" || inst == "andi"|| inst == "slli" || inst == "srli" || inst == "srai" )
+    if(inst == "jalr" || inst == "lb" || inst == "lh" || inst == "lw" || inst == "lbu" || inst == "lhu" || inst == "addi" || inst == "slti" || inst == "sltiu" || inst == "xori" || inst == "ori" || inst == "andi"|| inst == "slli" || inst == "srli" || inst == "srai" )
         return true;
     else
         return false;
 }
 
-void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int pc, bool pc_changed , map< int , string > memory)
+void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, bool &pc_changed , map< int , int > &memory)
 {
     int rd = -1, rs1 = -1, imm;
     bool imm_flag;
@@ -45,16 +45,17 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
         if(inst == "jalr")
         {
             rd = pc + 4;
+            pc = rs1 + imm;
             pc_changed = true;
 
         }
         else if(inst == "lb")
         {
-
+            rd = memory[rs1+imm];
         }
         else if(inst == "lw")
         {
-            
+            rd = memory[rs1+imm];
         }
         else if(inst == "lbu")
         {
@@ -66,31 +67,48 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
         }
         else if(inst == "addi")
         {
-            /* code */
+            rd = rs1 + imm;
         }
         else if(inst == "slti")
         {
-            /* code */
+            if( rs1 < imm)
+                rd = 1;
+            else
+                rd = 0;
+
         }
         else if(inst == "sltiu")
         {
-            /* code */
+            if ( rs1 >= 0 && imm>=0)
+				if(rs1 < imm)
+					rd = 1;
+				else
+					rd = 0;
+			else if(rs1 >= 0 && imm < 0)
+				rd = 1;
+			else if (rs1 < 0 && imm < 0)
+				if (rs1 < imm)
+					rd = 1;
+				else
+					rd = 0;
+			else if (rs1 < 0 && imm >= 0)
+				rd = 0;
         }
         else if(inst == "xori")
         {
-            /* code */
+            rd = rs1 ^ imm ;
         }
         else if(inst == "ori")
         {
-            /* code */
+            rd = rs1 | imm ;
         }
         else if(inst == "andi")
         {
-            /* code */
+            rd = rs1 & imm ;
         }
         else if(inst == "slli")
         {
-            /* code */
+            rd = rs1 << imm ;
         }
         else if(inst == "srli")
         {

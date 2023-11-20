@@ -3,13 +3,16 @@
 #include <fstream>
 #include <map>
 #include "data.hpp"
+#include "R-Format.cpp"
+#include "I-Format.cpp"
+
 using namespace std;
 // C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
 void assembler()
 {
 	int pc;
 	int ans(1);
-	string filepath, inst;
+	string filepath;
 	vector<pair<string, int> > reg;
 	reg.push_back(make_pair("Zero", 0)); reg.push_back(make_pair("ra", 0)); reg.push_back(make_pair("sp", 34359672828));
 	reg.push_back(make_pair("gp", 268468224)); reg.push_back(make_pair("tp", 0)); reg.push_back(make_pair("t0", 0));
@@ -52,6 +55,7 @@ void assembler()
 
 		cout << "enter your starting PC\n";
 		cin >> pc;
+
 		end = Intializing_Data(filepath, pc, instructions, labels);
 
 		cout << "Do you want to initialize your memory ? yes/Yes \n";
@@ -69,10 +73,70 @@ void assembler()
 			cout << "Do you want to initialize another thing in your memory? yes/Yes \n";
 			cin >> mem;
 		}
+
+		cout <<  " memory\n";
+		
+		for (const auto& pair : memory) 
+		{
+			cout << "Address: " << pair.first << ", Value: " << pair.second << endl;
+		}
+
+		int startpc(pc);
+		bool pc_changed(false);
+
+		
+		do{
+			stringstream instruction(instructions[pc]);
+        	string store;
+			string temp;
+
+        	
+        	if (instruction >> store) {
+				store.erase(remove(store.begin(), store.end(), ' '), store.end());
+				temp = store;
+			}
+
+			string concat;
+        	concat = instructions[pc];
+        	int i = concat.find(temp);
+        	concat.erase(i,temp.length());
+			
+        	check_format(temp, concat, reg, pc, memory, pc_changed);
+
+			if(!pc_changed )
+        		pc += 4;
+			
+		}while(pc != end+4);
 	}
 	else
 		exit(1);
 }
+
+void removeLeadingSpacesAndTabs(string& input) {
+    int start = input.find_first_not_of(" \t"); // Find the first character that is not a space or tab
+    if (start != string::npos) {
+        input = input.substr(start); // Modify the input string to start from the first non-space/tab character
+    } else {
+        input = ""; // If the input is all spaces and tabs, set the input string to an empty string
+    }
+}
+
+void check_format(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, map <int , int> &memory, bool &pc_changed) // name , string
+{
+	pc_changed = false;
+	// if(RFormatChecker(inst))
+	// {
+	// 	//RFormat(inst, inst_rest, reg);
+	// }
+	// else 
+	if(IFormatChecker(inst))
+	{
+		IFormat(inst, inst_rest, reg, pc, pc_changed,  memory);
+	}
+	else
+		cout << "not defined yet bas hi\n";
+   
+};
 
 string removing_comments(string line)
 {
@@ -113,7 +177,7 @@ string storing_label(string line)
 int Intializing_Data(string filepath, int pc, map< int, string> &instructions, map<string, int> &labels)
 {
 	//C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
-	cout << "tab\n";
+
 	ifstream input(filepath);
 	
 
@@ -121,18 +185,15 @@ int Intializing_Data(string filepath, int pc, map< int, string> &instructions, m
 	string label="";
 	if (input.is_open())
 	{
-		cout << "eeeeeeehhhh \n";
 		getline(input, line);
 		if (line[0] == '#' || line == "")
 		{
-			cout << "baaa1";
 			getline(input, line);
 			line = removing_comments(line);
 		}
 		size_t found = line.find(':');
 		if (found != string::npos)
 		{
-			cout << "baaa2";
 			int i = 0;
 			while (line[i] != ':')
 			{
@@ -142,10 +203,10 @@ int Intializing_Data(string filepath, int pc, map< int, string> &instructions, m
 			labels[label] = pc;
 			getline(input, line);
 			line = removing_comments(line);
+			removeLeadingSpacesAndTabs(line);
 			instructions[pc] = line;
 			while (!input.eof())
 			{
-				cout << "baaa3";
 				label = "";
 				getline(input, line);
 				line = removing_comments(line);
@@ -156,8 +217,9 @@ int Intializing_Data(string filepath, int pc, map< int, string> &instructions, m
 				}
 				else
 				{
+					removeLeadingSpacesAndTabs(line);
 					pc += 4;
-					instructions[pc] = label;
+					instructions[pc] = line;
 				}
 
 			}
@@ -166,6 +228,7 @@ int Intializing_Data(string filepath, int pc, map< int, string> &instructions, m
 	}
 	input.close();
 	int end = pc;
+
 	cout << " label\n";
 	for (const auto& pair : labels) {
 		cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
@@ -174,5 +237,6 @@ int Intializing_Data(string filepath, int pc, map< int, string> &instructions, m
 	for (const auto& pair : instructions) {
 		cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
 	}
+
 	return end;
 }

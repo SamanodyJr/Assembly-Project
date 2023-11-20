@@ -5,15 +5,11 @@
 #include <sstream>
 #include <algorithm>
 #include <map>
-#include "data.hpp"
-
+#include "data.cpp"
+// #include "R-Format.cpp"
+// #include "I-Format.cpp"
 
 using namespace std;
-void check_format(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, map <int , string> memory, bool &pc_changed) // name , string
-{
-
-   
-};
 
 int main()
 {   
