@@ -7,6 +7,6 @@
 using namespace std;
 
 bool IFormatChecker(string inst);
-void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, bool &pc_changed , map< int , int >  &memory);
+void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, bool &pc_changed , map< int , int >  &memory, bool &err);
 
 #endif 

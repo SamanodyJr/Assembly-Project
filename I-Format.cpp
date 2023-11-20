@@ -15,7 +15,7 @@ bool IFormatChecker(string inst)
         return false;
 }
 
-void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, bool &pc_changed , map< int , int > &memory)
+void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, bool &pc_changed , map< int , int > &memory, bool &err)
 {
     int rd = -1, rs1 = -1, imm;
     bool imm_flag;
@@ -51,7 +51,12 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
         }
         else if(inst == "lb")
         {
-            rd = memory[rs1+imm];
+            if(memory.find(rs1+imm) != memory.end())
+                rd = memory[rs1+imm];
+            else
+            {
+                "memory location not found please make sure it is initialized \n";
+            }
         }
         else if(inst == "lw")
         {
@@ -120,5 +125,5 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
         }
     }
 
- 
+    return;
 }

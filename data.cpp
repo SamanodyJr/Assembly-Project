@@ -82,7 +82,7 @@ void assembler()
 		}
 
 		int startpc(pc);
-		bool pc_changed(false);
+		bool pc_changed(false), err(false);
 
 		
 		do{
@@ -92,7 +92,6 @@ void assembler()
 
         	
         	if (instruction >> store) {
-				store.erase(remove(store.begin(), store.end(), ' '), store.end());
 				temp = store;
 			}
 
@@ -101,11 +100,18 @@ void assembler()
         	int i = concat.find(temp);
         	concat.erase(i,temp.length());
 			
-        	check_format(temp, concat, reg, pc, memory, pc_changed);
+        	check_format(temp, concat, reg, pc, memory, pc_changed, err);
 
 			if(!pc_changed )
         		pc += 4;
 			
+			if(err)
+			{
+				cout << "encountered problem with your asm instructions\n";
+				break;
+			}
+			//displaying
+
 		}while(pc != end+4);
 	}
 	else
@@ -121,9 +127,10 @@ void removeLeadingSpacesAndTabs(string& input) {
     }
 }
 
-void check_format(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, map <int , int> &memory, bool &pc_changed) // name , string
+void check_format(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, map <int , int> &memory, bool &pc_changed, bool&err) // name , string
 {
 	pc_changed = false;
+	err = false;
 	// if(RFormatChecker(inst))
 	// {
 	// 	//RFormat(inst, inst_rest, reg);
@@ -131,7 +138,7 @@ void check_format(string inst, string inst_rest, vector<pair<string, int> > reg,
 	// else 
 	if(IFormatChecker(inst))
 	{
-		IFormat(inst, inst_rest, reg, pc, pc_changed,  memory);
+		IFormat(inst, inst_rest, reg, pc, pc_changed,  memory, err);
 	}
 	else
 		cout << "not defined yet bas hi\n";
