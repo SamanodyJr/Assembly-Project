@@ -99,7 +99,7 @@ void assembler()
         	concat = instructions[pc];
         	int i = concat.find(temp);
         	concat.erase(i,temp.length());
-			
+			removeLeadingSpacesAndTabs(concat);
         	check_format(temp, concat, reg, pc, memory, pc_changed, err);
 
 			if(!pc_changed )
@@ -136,11 +136,11 @@ void check_format(string inst, string inst_rest, vector<pair<string, int> > reg,
 	// 	//RFormat(inst, inst_rest, reg);
 	// }
 	// else 
-	if(IFormatChecker(inst))
-	{
-		IFormat(inst, inst_rest, reg, pc, pc_changed,  memory, err);
-	}
-	else
+	// if(IFormatChecker(inst))
+	// {
+	// 	IFormat(inst, inst_rest, reg, pc, pc_changed,  memory, err);
+	// }
+	// else
 		cout << "not defined yet bas hi\n";
    
 };

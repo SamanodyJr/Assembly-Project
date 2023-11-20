@@ -7,12 +7,19 @@
 
 using namespace std;
 
-bool IFormatChecker(string inst)
+bool IFormatChecker(string inst, bool &offset)
 {
-    if(inst == "jalr" || inst == "lb" || inst == "lh" || inst == "lw" || inst == "lbu" || inst == "lhu" || inst == "addi" || inst == "slti" || inst == "sltiu" || inst == "xori" || inst == "ori" || inst == "andi"|| inst == "slli" || inst == "srli" || inst == "srai" )
+    if( inst == "addi" || inst == "slti" || inst == "sltiu" || inst == "xori" || inst == "ori" || inst == "andi"|| inst == "slli" || inst == "srli" || inst == "srai" )
+    {
+        offset = false;
         return true;
-    else
+    }
+    else if (inst == "jalr" || inst == "lb" || inst == "lh" || inst == "lw" || inst == "lbu" || inst == "lhu" )
+    {
+        offset = true
         return false;
+    }
+        
 }
 
 void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, bool &pc_changed , map< int , int > &memory, bool &err)
@@ -20,11 +27,14 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
     int rd = -1, rs1 = -1, imm;
     bool imm_flag;
     stringstream instruction(inst_rest);
+    
     string store;
     vector <string> temp;
         while (instruction >> store) {
                 store.erase(remove(store.begin(), store.end(), ','), store.end());
+                store.erase(remove(store.begin(), store.end(), ' '), store.end());
                 temp.push_back(store);
+                cout << store << endl;
             }
 	for (size_t i = 0; i < reg.size(); ++i) {
 		if (reg[i].first == temp[0]) {
