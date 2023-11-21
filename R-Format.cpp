@@ -1,28 +1,49 @@
 #include <iostream>
 #include <vector>
+#include <sstream>
 #include "R-Format.hpp"
 using namespace std;
-
-
-void RFormat(string inst, string destination, string source1, string source2, vector<pair<string, int> > reg)
+bool RFormatChecker(string inst)
 {
-	// name inst 
-	//substring 
-	//
+	if (inst == "add" || inst == "sub" || inst == "and" || inst == "or" || inst == "xor" || inst == "sll" || inst == "srl" || inst == "sra" || inst == "slt" || inst == "sltu")
+		return true;
+	return false;
+}
+
+void RFormat(string inst, string inst_rest, vector<pair<string, int> > reg, bool err)
+{
+	
 	int d = -1, s1 = -1, s2 = -1;
+	stringstream instruction(inst_rest);
+
+	string store;
+	vector <string> temp;
+	
+	while (instruction >> store)
+	{
+		cout << "kalam ";
+		store.erase(remove(store.begin(), store.end(), ','), store.end());
+		temp.push_back(store);
+		cout << store << endl;
+	}
+
 	for (size_t i = 0; i < reg.size(); ++i) {
-		if (reg[i].first == destination) {
+		if (reg[i].first == temp[0]) {
 			d = i;
 		}
-		else if (reg[i].first == source1) {
+		if (reg[i].first == temp[1])
+		{
 			s1 = i;
 		}
-		else if (reg[i].first == source2) {
+		if (reg[i].first == temp[2])
+		{
 			s2 = i;
 		}
 	}
-	if (d == -1 || s1 == -1 || s2 == -1) {
+	if (d == -1 || s1 == -1 || s2 == -1)
+	{
 		cout << "Invalid entries." << endl;
+		err = true;
 	}
 	else
 	{

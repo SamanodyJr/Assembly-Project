@@ -28,7 +28,7 @@ void assembler()
 	do
 	{
 
-		cout << "~~~~~~~~~~~~~~~~~~Welcome to your RISC-V simulator~~~~~~~~~~~~~~~~ \n\n";
+		cout << "~~~~~~~~~~~~~~~~~Welcome to your RISC-V simulator~~~~~~~~~~~~~~~ \n\n";
 		cout << "\t\tWhat would you like to do?\n\n"
 			<< "\t\t  1. Read from an exisisting file\n\t\t  2. Exit\n";
 
@@ -74,9 +74,9 @@ void assembler()
 			cin >> mem;
 		}
 
-		cout <<  " memory\n";
-		
-		for (const auto& pair : memory) 
+		cout << " memory\n";
+
+		for (const auto& pair : memory)
 		{
 			cout << "Address: " << pair.first << ", Value: " << pair.second << endl;
 		}
@@ -84,50 +84,51 @@ void assembler()
 		int startpc(pc);
 		bool pc_changed(false), err(false);
 
-		
-		do{
+
+		do {
 			stringstream instruction(instructions[pc]);
-        	string store;
+			string store;
 			string temp;
 
-        	
-        	if (instruction >> store) {
+
+			if (instruction >> store) {
 				temp = store;
 			}
 
 			string concat;
-        	concat = instructions[pc];
-        	int i = concat.find(temp);
-        	concat.erase(i,temp.length());
+			concat = instructions[pc];
+			int i = concat.find(temp);
+			concat.erase(i, temp.length());
 			removeLeadingSpacesAndTabs(concat);
-        	check_format(temp, concat, reg, pc, memory, pc_changed, err);
+			check_format(temp, concat, reg, pc, memory, pc_changed, err);
 
-			if(!pc_changed )
-        		pc += 4;
-			
-			if(err)
+			if (!pc_changed)
+				pc += 4;
+
+			if (err)
 			{
 				cout << "encountered problem with your asm instructions\n";
 				break;
 			}
 			//displaying
 
-		}while(pc != end+4);
+		} while (pc != end + 4);
 	}
 	else
 		exit(1);
 }
 
 void removeLeadingSpacesAndTabs(string& input) {
-    int start = input.find_first_not_of(" \t"); // Find the first character that is not a space or tab
-    if (start != string::npos) {
-        input = input.substr(start); // Modify the input string to start from the first non-space/tab character
-    } else {
-        input = ""; // If the input is all spaces and tabs, set the input string to an empty string
-    }
+	int start = input.find_first_not_of(" \t"); // Find the first character that is not a space or tab
+	if (start != string::npos) {
+		input = input.substr(start); // Modify the input string to start from the first non-space/tab character
+	}
+	else {
+		input = ""; // If the input is all spaces and tabs, set the input string to an empty string
+	}
 }
 
-void check_format(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, map <int , int> &memory, bool &pc_changed, bool&err) // name , string
+void check_format(string inst, string inst_rest, vector<pair<string, int> > reg, int& pc, map <int, int>& memory, bool& pc_changed, bool& err) // name , string
 {
 	pc_changed = false;
 	err = false;
@@ -141,8 +142,8 @@ void check_format(string inst, string inst_rest, vector<pair<string, int> > reg,
 	// 	IFormat(inst, inst_rest, reg, pc, pc_changed,  memory, err);
 	// }
 	// else
-		cout << "not defined yet bas hi\n";
-   
+	cout << "not defined yet bas hi\n";
+
 };
 
 string removing_comments(string line)
@@ -181,15 +182,15 @@ string storing_label(string line)
 	else
 		return line;
 }
-int Intializing_Data(string filepath, int pc, map< int, string> &instructions, map<string, int> &labels)
+int Intializing_Data(string filepath, int pc, map< int, string>& instructions, map<string, int>& labels)
 {
 	//C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
 
 	ifstream input(filepath);
-	
+
 
 	string line;
-	string label="";
+	string label = "";
 	if (input.is_open())
 	{
 		getline(input, line);
@@ -231,7 +232,7 @@ int Intializing_Data(string filepath, int pc, map< int, string> &instructions, m
 
 			}
 		}
-		
+
 	}
 	input.close();
 	int end = pc;
@@ -240,10 +241,10 @@ int Intializing_Data(string filepath, int pc, map< int, string> &instructions, m
 	for (const auto& pair : labels) {
 		cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
 	}
-	cout <<  " instructions\n";
+	cout << " instructions\n";
 	for (const auto& pair : instructions) {
 		cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
 	}
 
-	return end;
+	return end;
 }
