@@ -76,14 +76,58 @@ void IFormat(string inst, string inst_rest, vector<pair<string, long long int> >
 	{
         if(inst == "jalr")
         {
-            // reg[rd].second = pc + 4;
-            // pc = reg[rs1].second + imm;
-            // pc_changed = true;
-            // cout << pc << "pc\n";
+            reg[rd].second = pc + 4;
+            pc = reg[rs1].second + imm;
+            pc_changed = true;
+            cout << pc << "pc\n";
+        }
+        else if(inst == "lh")
+        {
+                       if(memory.find(reg[rs1].second+imm) != memory.end())
+             {
+                if (memory[reg[rs1].second+imm] < 0)
+                {
+                    reg[rd].second = memory[reg[rs1].second+imm] & 0xFFFF;
+                    
+
+                    reg[rd].second |= 0xFFFFFFFFFFFF0000;
+                }
+                else
+                {
+                    reg[rd].second = memory[reg[rs1].second+imm] & 0xFFFF;
+                    reg[rd].second |= 0;
+                }
+
+             }
+            else
+            {
+                "Memory location not found please make sure it is initialized \n";
+                err = true;
+            } 
         }
         else if(inst == "lb")
         {
-        
+             if(memory.find(reg[rs1].second+imm) != memory.end())
+             {
+                if (memory[reg[rs1].second+imm] < 0)
+                {
+                    reg[rd].second = memory[reg[rs1].second+imm] & 0xFF;
+                    
+
+                    reg[rd].second |= 0xFFFFFFFFFFFFFF00;
+                }
+                else
+                {
+                    reg[rd].second = memory[reg[rs1].second+imm] & 0xFF;
+                    reg[rd].second |= 0;
+                }
+
+             }
+            else
+            {
+                "Memory location not found please make sure it is initialized \n";
+                err = true;
+            }        
         }
         else if(inst == "lw")
         {
@@ -97,11 +141,23 @@ void IFormat(string inst, string inst_rest, vector<pair<string, long long int> >
         }
         else if(inst == "lbu")
         {
-            /* code */
+            if(memory.find(reg[rs1].second+imm) != memory.end())
+                reg[rd].second = (memory[reg[rs1].second+imm] & 0xFF);
+            else
+            {
+                "Memory location not found please make sure it is initialized \n";
+                err = true;
+            }  
         }
         else if(inst == "lhu")
         {
-            /* code */
+            if(memory.find(reg[rs1].second+imm) != memory.end())
+                reg[rd].second = (memory[reg[rs1].second+imm] & 0xFFFF);
+            else
+            {
+                "Memory location not found please make sure it is initialized \n";
+                err = true;
+            }  
         }
         else if(inst == "addi")
         {
@@ -152,13 +208,14 @@ void IFormat(string inst, string inst_rest, vector<pair<string, long long int> >
         }
         else if(inst == "srli")
         {
-            unsigned long long int unsignedImm = static_cast<unsigned long long int>(imm);
-            unsigned long long int unsignedrs1 = static_cast<unsigned long long int>(reg[rs1].second);
-           reg[rd].second = unsignedrs1 >> unsignedImm ;
+            unsigned int unsignedImm = static_cast<unsigned int>(imm);
+            unsigned int unsignedrs1 = static_cast<unsigned int>(reg[rs1].second);
+           reg[rd].second = static_cast<unsigned long long int> (unsignedrs1 >> unsignedImm );
+        
         }
         else if(inst == "srai")
         {
-            reg[rd].second = reg[rs1].second >> imm ;
+           reg[rd].second = reg[rs1].second >> imm ;
         }
     }
 
