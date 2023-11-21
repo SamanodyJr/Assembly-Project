@@ -11,10 +11,10 @@ using namespace std;
 // C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
 void assembler()
 {
-	int pc;
+	long long int pc;
 	int ans(1);
 	string filepath;
-	vector<pair<string, int> > reg;
+	vector<pair<string, long long int> > reg;
 	reg.push_back(make_pair("zero", 0)); reg.push_back(make_pair("ra", 0)); reg.push_back(make_pair("sp", 34359672828));
 	reg.push_back(make_pair("gp", 268468224)); reg.push_back(make_pair("tp", 0)); reg.push_back(make_pair("t0", 0));
 	reg.push_back(make_pair("t1", 0)); reg.push_back(make_pair("t2", 0)); reg.push_back(make_pair("s0", 0));
@@ -44,11 +44,11 @@ void assembler()
 
 	if (ans == 1)
 	{
-		map < int, int > memory;
-		map < int, string> instructions;
-		map < string, int> labels;
-		int end;
-		int memadd, memvalue; //initializing data memory if user wants
+		map < long long int, long long int > memory;
+		map < long long int, string> instructions;
+		map < string, long long int> labels;
+		long long int end;
+		long long int memadd, memvalue; //initializing data memory if user wants
 		string mem;//flag to know if they want to initialize their data memory
 
 		cout << "enter your file path\n";
@@ -82,10 +82,10 @@ void assembler()
 			cout << "Address: " << pair.first << ", Value: " << pair.second << endl;
 		}
 
-		int startpc(pc);
+		long long int startpc(pc);
 		bool pc_changed(false), err(false);
+		char nextinst;
 
-		
 		do{
 			string lowCAPinst(instructions[pc]);
 			for(int i = 0; i < lowCAPinst.length(); i++)
@@ -107,8 +107,10 @@ void assembler()
 			removeLeadingSpacesAndTabs(concat);
 			concat.erase(remove(concat.begin(), concat.end(), ' '), concat.end());
 			AddSpaces(concat);
-			cout << concat << endl;
+			//cout << concat << endl;
         	check_format(temp, concat, reg, pc, memory, pc_changed, err);
+			
+			cout <<"Instruction: " <<instructions[pc] <<endl ;
 
 			if (!pc_changed)
 				pc += 4;
@@ -119,8 +121,28 @@ void assembler()
 				break;
 			}
 			//displaying
+			
+			cout << "\n\nMemory: \n" ;
+			if(memory.empty())
+				cout << "Memory has not been accessed yet!\n";
+			else
+				for (const auto& pair : memory)
+				{
+				cout << "Address: " << pair.first << ", Value: " << pair.second << endl;
+				}
+			
+			cout << "\n\n Registers: \n";
+			cout <<"Name\tNumber\tValue\n";
+			for (int i = 0; i < reg.size(); ++i) {
+        		cout  << reg[i].first<< "\t" << i << "\t" <<reg[i].second << endl;
+    		}
 
-		} while (pc != end + 4);
+			cout << "Current PC:" << pc << endl;
+
+			cout << "Do you want to move to next instruction?y/n\n";
+			tolower(nextinst);
+			cin >> nextinst ;
+		} while (pc != end + 4 && nextinst == 'y');
 	}
 	else
 		exit(1);
@@ -136,25 +158,24 @@ void removeLeadingSpacesAndTabs(string& input) {
 	}
 }
 
-void check_format(string inst, string inst_rest, vector<pair<string, int> > reg, int& pc, map <int, int>& memory, bool& pc_changed, bool& err) // name , string
+void check_format(string inst, string inst_rest, vector<pair<string, long long int> > &reg, long long int& pc, map <long long int,  long long int>& memory, bool& pc_changed, bool& err) // name , string
 {
 	pc_changed = false;
 	err = false;
 	bool offset;
-	// if(RFormatChecker(inst))
-	// {
-	// 	//RFormat(inst, inst_rest, reg);
-	// }
-	
 	cout << inst << endl;
-	if(IFormatChecker(inst, offset))
+	if(RFormatChecker(inst))
+	{
+		RFormat(inst, inst_rest, reg, err);
+	}
+	else if(IFormatChecker(inst, offset))
 	{
 		IFormat(inst, inst_rest, reg, pc, pc_changed,  memory, err, offset);
 	}
-	else if(SFormatChecker(inst))
-	{
-		SFormat(inst, inst_rest, reg,  memory, err);
-	}
+	// else if(SFormatChecker(inst))
+	// {
+	// 	SFormat(inst, inst_rest, reg,  memory, err);
+	// }
 	else
 		cout << "not defined yet bas hi\n";
    
@@ -206,7 +227,7 @@ string storing_label(string line)
 	else
 		return line;
 }
-int Intializing_Data(string filepath, int pc, map< int, string>& instructions, map<string, int>& labels)
+long long int Intializing_Data(string filepath, long long int pc, map< long long int, string>& instructions, map<string, long long int>& labels)
 {
 	//C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
 
@@ -259,7 +280,7 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 
 	}
 	input.close();
-	int end = pc;
+	long long int end = pc;
 
 	cout << " label\n";
 	for (const auto& pair : labels) {
@@ -270,5 +291,5 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 		cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
 	}
 
-	return�end;
+	return end;
 }
