@@ -41,7 +41,7 @@ void JFormat(string inst, string inst_rest, vector<pair<string, int> >& reg, boo
 	}
 	else
 	{
-		if (inst == "jal")
+		if (inst == "jal" && reg[d]!=reg[0])
 		{
 			reg[d].second = pc+4;
 			pc = labels[l];
