@@ -6,8 +6,7 @@
 #include <algorithm>
 #include <map>
 #include "data.cpp"
-#include "R-Format.cpp"
-#include "I-Format.cpp"
+
 
 using namespace std;
 
@@ -34,7 +33,7 @@ int main()
     // int i = concat.find(temp[0]);
     // concat.erase(i,temp[0].length());
     // check_format(temp[0], concat, reg);
-    // tempPC += 4;
+    // tempPCï¿½+=ï¿½4;
 
 
 

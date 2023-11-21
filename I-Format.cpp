@@ -23,9 +23,10 @@ bool IFormatChecker(string inst, bool &offset)
         return false;  
 }
 
-void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, bool &pc_changed , map< int , int > &memory, bool &err, bool &offset)
+void IFormat(string inst, string inst_rest, vector<pair<string, long long int> > &reg, long long int &pc, bool &pc_changed , map< long long int , long long int > &memory, bool &err, bool &offset)
 {
-    int rd = -1, rs1 = -1, imm;
+    int rd = -1, rs1 = -1;
+    long long int imm;
     
     stringstream instruction(inst_rest);
     
@@ -49,6 +50,7 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
 		    }
 	    }
         imm =  stoi(temp[2]);
+        cout << imm << endl;
     }
     else{
         string immediate, source;
@@ -63,7 +65,8 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
                 cout << rs1 <<endl;
 		    }
          }
-         imm =  stoi(immediate);    
+         imm =  stoi(immediate);  
+         cout << imm <<endl;  
     }
 	if (rd == -1 || rs1 == -1 ) {
 		cout << "Invalid entries." << endl;
@@ -73,10 +76,10 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
 	{
         if(inst == "jalr")
         {
-            reg[rd].second = pc + 4;
-            pc = reg[rs1].second + imm;
-            pc_changed = true;
-            cout << pc << "pc\n";
+            // reg[rd].second = pc + 4;
+            // pc = reg[rs1].second + imm;
+            // pc_changed = true;
+            // cout << pc << "pc\n";
         }
         else if(inst == "lb")
         {
@@ -102,7 +105,9 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
         }
         else if(inst == "addi")
         {
+            cout << reg[rs1].second + imm << "sum\n";
             reg[rd].second = reg[rs1].second + imm;
+            cout << reg[rd].second;
         }
         else if(inst == "slti")
         {
@@ -147,8 +152,8 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
         }
         else if(inst == "srli")
         {
-            unsigned int unsignedImm = static_cast<unsigned int>(imm);
-            unsigned int unsignedrs1 = static_cast<unsigned int>(reg[rs1].second);
+            unsigned long long int unsignedImm = static_cast<unsigned long long int>(imm);
+            unsigned long long int unsignedrs1 = static_cast<unsigned long long int>(reg[rs1].second);
            reg[rd].second = unsignedrs1 >> unsignedImm ;
         }
         else if(inst == "srai")
