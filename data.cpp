@@ -84,7 +84,7 @@ void assembler()
 
 		int startpc(pc);
 		bool pc_changed(false), err(false);
-		char nextinst;
+		char nextinst('n');
 
 		do{
 			string lowCAPinst(instructions[pc]);

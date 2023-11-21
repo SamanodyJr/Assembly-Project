@@ -10,7 +10,7 @@ bool RFormatChecker(string inst)
 	return false;
 }
 
-void RFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, bool err)
+void RFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, bool &err)
 {
 	
 	int d = -1, s1 = -1, s2 = -1;
@@ -21,7 +21,6 @@ void RFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, boo
 	
 	while (instruction >> store)
 	{
-		cout << "kalam ";
 		store.erase(remove(store.begin(), store.end(), ','), store.end());
 		temp.push_back(store);
 		cout << store << endl;
