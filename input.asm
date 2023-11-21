@@ -1,7 +1,6 @@
 fact:
       addi  sp, sp, -8 # adjust stack for 2 items
-      addi  ra, ra, -200
-      sb    ra, 4(sp) # save return address
+      sw    ra, 4(sp) # save return address
       sw    a0, 0(sp) # save argument
       slti  t0,a0,1 # test for n < 1
       beq   t0, zero, L1

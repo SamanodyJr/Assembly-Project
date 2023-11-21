@@ -1,5 +1,5 @@
-#ifndef DATA_HPP
-#define DATA_HPP
+#ifndef B_FORMAT_HPP
+#define B_FORMAT_HPP
 
 #include <iostream>
 #include <vector>
@@ -9,10 +9,7 @@
 using namespace std;
 
 bool BFormatChecker(string inst);
-void BFormat(string inst, string inst_rest, vector<pair<string, long long int> >& reg, bool &err, map < string,int> labels, int& pc, bool& pc_changed);
-
-
-
+void BFormat(string inst, string inst_rest, vector<pair<string, int> >& reg, bool &err, map < string,int> labels, int& pc, bool& pc_changed);
 
 
 #endif

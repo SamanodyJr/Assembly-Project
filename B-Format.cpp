@@ -11,7 +11,7 @@ bool BFormatChecker(string inst)
 		return true;
 	return false;
 }
-void BFormat(string inst, string inst_rest, vector<pair<string, long long int> >& reg, bool& err, map < string, int> labels, int& pc, bool& pc_changed)
+void BFormat(string inst, string inst_rest, vector<pair<string, int> >& reg, bool& err, map < string, int> labels, int& pc, bool& pc_changed)
 {
 	int s1 = -1, s2 = -1;
 	string l = "";

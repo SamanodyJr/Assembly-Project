@@ -6,6 +6,7 @@
 #include "R-Format.cpp"
 #include "I-Format.cpp"
 #include "S-Format.cpp"
+#include "B-Format.cpp"
 
 using namespace std;
 // C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
@@ -85,8 +86,10 @@ void assembler()
 		int startpc(pc);
 		bool pc_changed(false), err(false);
 		char nextinst('n');
+		
 
 		do{
+			
 			string lowCAPinst(instructions[pc]);
 			for(int i = 0; i < lowCAPinst.length(); i++)
 				tolower(lowCAPinst[i]);
@@ -95,7 +98,7 @@ void assembler()
         	string store;
 			string temp;
 
-
+			
 			if (instruction >> store) {
 				temp = store;
 			}
@@ -108,9 +111,10 @@ void assembler()
 			concat.erase(remove(concat.begin(), concat.end(), ' '), concat.end());
 			AddSpaces(concat);
 			//cout << concat << endl;
-        	check_format(temp, concat, reg, pc, memory, pc_changed, err);
+			cout <<"Instruction: " << instructions[pc] <<endl ;
+        	check_format(temp, concat, reg, pc, memory, pc_changed, err, labels);
 			
-			cout <<"Instruction: " <<instructions[pc] <<endl ;
+			
 
 			if (!pc_changed)
 				pc += 4;
@@ -158,7 +162,7 @@ void removeLeadingSpacesAndTabs(string& input) {
 	}
 }
 
-void check_format(string inst, string inst_rest, vector<pair<string, int> > &reg, int& pc, map <int,  int>& memory, bool& pc_changed, bool& err) // name , string
+void check_format(string inst, string inst_rest, vector<pair<string, int> > &reg, int& pc, map <int,  int>& memory, bool& pc_changed, bool& err, map <string,  int>& labels) // name , string
 {
 	pc_changed = false;
 	err = false;
@@ -175,6 +179,10 @@ void check_format(string inst, string inst_rest, vector<pair<string, int> > &reg
 	else if(SFormatChecker(inst))
 	{
 		SFormat(inst, inst_rest, reg,  memory, err);
+	}
+	else if(BFormatChecker(inst))
+	{
+		BFormat(inst, inst_rest, reg, err, labels, pc, pc_changed);
 	}
 	else
 		cout << "not defined yet bas hi\n";
@@ -255,6 +263,30 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 			}
 			labels[label] = pc;
 			getline(input, line);
+			line = removing_comments(line);
+			removeLeadingSpacesAndTabs(line);
+			instructions[pc] = line;
+			while (!input.eof())
+			{
+				label = "";
+				getline(input, line);
+				line = removing_comments(line);
+				label = storing_label(line);
+				if (label != line)
+				{
+					labels[label] = pc + 4;
+				}
+				else
+				{
+					removeLeadingSpacesAndTabs(line);
+					pc += 4;
+					instructions[pc] = line;
+				}
+
+			}
+		}
+		else
+		{
 			line = removing_comments(line);
 			removeLeadingSpacesAndTabs(line);
 			instructions[pc] = line;

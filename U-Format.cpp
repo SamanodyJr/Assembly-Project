@@ -32,13 +32,16 @@ void UFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
 	}
 	else
 	{
-        if(inst == "lui")
+        if(reg[rd] != reg[0])
         {
-            reg[rd].second = imm << 12;
-        }
-        else if(inst == "auipc")
-        {
-            reg[rd].second = pc + (imm << 12);
+            if(inst == "lui")
+            {
+                reg[rd].second = imm << 12;
+            }
+            else if(inst == "auipc")
+            {
+                reg[rd].second = pc + (imm << 12);
+            }
         }
     }
 }

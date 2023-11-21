@@ -70,147 +70,150 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, int
 	}
 	else
 	{
-        if(inst == "jalr")
+        if(reg[rd] != reg[0])
         {
-            reg[rd].second = pc + 4;
-            pc = reg[rs1].second + imm;
-            pc_changed = true;
-        }
-        else if(inst == "lh")
-        {
-                       if(memory.find(reg[rs1].second+imm) != memory.end())
-             {
-                if (memory[reg[rs1].second+imm] < 0)
+            if(inst == "jalr")
+            {
+                reg[rd].second = pc + 4;
+                pc = reg[rs1].second + imm;
+                pc_changed = true;
+            }
+            else if(inst == "lh")
+            {
+                        if(memory.find(reg[rs1].second+imm) != memory.end())
                 {
-                    reg[rd].second = memory[reg[rs1].second+imm] & 0xFFFF;
-                    
+                    if (memory[reg[rs1].second+imm] < 0)
+                    {
+                        reg[rd].second = memory[reg[rs1].second+imm] & 0xFFFF;
+                        
 
-                    reg[rd].second |= 0xFFFFFFFFFFFF0000;
+                        reg[rd].second |= 0xFFFFFFFFFFFF0000;
+                    }
+                    else
+                    {
+                        reg[rd].second = memory[reg[rs1].second+imm] & 0xFFFF;
+                        reg[rd].second |= 0;
+                    }
+
                 }
                 else
                 {
-                    reg[rd].second = memory[reg[rs1].second+imm] & 0xFFFF;
-                    reg[rd].second |= 0;
-                }
-
-             }
-            else
+                    "Memory location not found please make sure it is initialized \n";
+                    err = true;
+                } 
+            }
+            else if(inst == "lb")
             {
-                "Memory location not found please make sure it is initialized \n";
-                err = true;
-            } 
-        }
-        else if(inst == "lb")
-        {
-             if(memory.find(reg[rs1].second+imm) != memory.end())
-             {
-                if (memory[reg[rs1].second+imm] < 0)
+                if(memory.find(reg[rs1].second+imm) != memory.end())
                 {
-                    reg[rd].second = memory[reg[rs1].second+imm] & 0xFF;
-                    
+                    if (memory[reg[rs1].second+imm] < 0)
+                    {
+                        reg[rd].second = memory[reg[rs1].second+imm] & 0xFF;
+                        
 
-                    reg[rd].second |= 0xFFFFFFFFFFFFFF00;
+                        reg[rd].second |= 0xFFFFFFFFFFFFFF00;
+                    }
+                    else
+                    {
+                        reg[rd].second = memory[reg[rs1].second+imm] & 0xFF;
+                        reg[rd].second |= 0;
+                    }
+
                 }
                 else
                 {
-                    reg[rd].second = memory[reg[rs1].second+imm] & 0xFF;
-                    reg[rd].second |= 0;
-                }
+                    "Memory location not found please make sure it is initialized \n";
+                    err = true;
+                }        
+            }
+            else if(inst == "lw")
+            {
+                if(memory.find(reg[rs1].second+imm) != memory.end())
+                    reg[rd].second = memory[reg[rs1].second+imm];
+                else
+                {
+                    "Memory location not found please make sure it is initialized \n";
+                    err = true;
+                }        
+            }
+            else if(inst == "lbu")
+            {
+                if(memory.find(reg[rs1].second+imm) != memory.end())
+                    reg[rd].second = (memory[reg[rs1].second+imm] & 0xFF);
+                else
+                {
+                    "Memory location not found please make sure it is initialized \n";
+                    err = true;
+                }  
+            }
+            else if(inst == "lhu")
+            {
+                if(memory.find(reg[rs1].second+imm) != memory.end())
+                    reg[rd].second = (memory[reg[rs1].second+imm] & 0xFFFF);
+                else
+                {
+                    "Memory location not found please make sure it is initialized \n";
+                    err = true;
+                }  
+            }
+            else if(inst == "addi")
+            {
+                cout << reg[rs1].second + imm << "sum\n";
+                reg[rd].second = reg[rs1].second + imm;
+                cout << reg[rd].second;
+            }
+            else if(inst == "slti")
+            {
+                if( reg[rs1].second < imm)
+                    reg[rd].second = 1;
+                else
+                    reg[rd].second = 0;
 
-             }
-            else
+            }
+            else if(inst == "sltiu")
             {
-                "Memory location not found please make sure it is initialized \n";
-                err = true;
-            }        
-        }
-        else if(inst == "lw")
-        {
-            if(memory.find(reg[rs1].second+imm) != memory.end())
-                reg[rd].second = memory[reg[rs1].second+imm];
-            else
+                if ( reg[rs1].second >= 0 && imm>=0)
+                    if(reg[rs1].second < imm)
+                        reg[rd].second = 1;
+                    else
+                        reg[rd].second = 0;
+                else if(reg[rs1].second >= 0 && imm < 0)
+                    reg[rd].second = 1;
+                else if (reg[rs1].second < 0 && imm < 0)
+                    if (reg[rs1].second < imm)
+                        reg[rd].second = 1;
+                    else
+                        reg[rd].second = 0;
+                else if (reg[rs1].second < 0 && imm >= 0)
+                    reg[rd].second = 0;
+            }
+            else if(inst == "xori")
             {
-                "Memory location not found please make sure it is initialized \n";
-                err = true;
-            }        
-        }
-        else if(inst == "lbu")
-        {
-            if(memory.find(reg[rs1].second+imm) != memory.end())
-                reg[rd].second = (memory[reg[rs1].second+imm] & 0xFF);
-            else
+                reg[rd].second = reg[rs1].second ^ imm ;
+            }
+            else if(inst == "ori")
             {
-                "Memory location not found please make sure it is initialized \n";
-                err = true;
-            }  
-        }
-        else if(inst == "lhu")
-        {
-            if(memory.find(reg[rs1].second+imm) != memory.end())
-                reg[rd].second = (memory[reg[rs1].second+imm] & 0xFFFF);
-            else
+                reg[rd].second = reg[rs1].second | imm ;
+            }
+            else if(inst == "andi")
             {
-                "Memory location not found please make sure it is initialized \n";
-                err = true;
-            }  
-        }
-        else if(inst == "addi")
-        {
-            cout << reg[rs1].second + imm << "sum\n";
-            reg[rd].second = reg[rs1].second + imm;
-            cout << reg[rd].second;
-        }
-        else if(inst == "slti")
-        {
-            if( reg[rs1].second < imm)
-                reg[rd].second = 1;
-            else
-                reg[rd].second = 0;
-
-        }
-        else if(inst == "sltiu")
-        {
-            if ( reg[rs1].second >= 0 && imm>=0)
-				if(reg[rs1].second < imm)
-					reg[rd].second = 1;
-				else
-					reg[rd].second = 0;
-			else if(reg[rs1].second >= 0 && imm < 0)
-				reg[rd].second = 1;
-			else if (reg[rs1].second < 0 && imm < 0)
-				if (reg[rs1].second < imm)
-					reg[rd].second = 1;
-				else
-					reg[rd].second = 0;
-			else if (reg[rs1].second < 0 && imm >= 0)
-				reg[rd].second = 0;
-        }
-        else if(inst == "xori")
-        {
-            reg[rd].second = reg[rs1].second ^ imm ;
-        }
-        else if(inst == "ori")
-        {
-            reg[rd].second = reg[rs1].second | imm ;
-        }
-        else if(inst == "andi")
-        {
-            reg[rd].second = reg[rs1].second & imm ;
-        }
-        else if(inst == "slli")
-        {
-            reg[rd].second = reg[rs1].second << imm ;
-        }
-        else if(inst == "srli")
-        {
-            unsigned int unsignedImm = static_cast<unsigned int>(imm);
-            unsigned int unsignedrs1 = static_cast<unsigned int>(reg[rs1].second);
-           reg[rd].second = static_cast<unsigned int> (unsignedrs1 >> unsignedImm );
-        
-        }
-        else if(inst == "srai")
-        {
-           reg[rd].second = reg[rs1].second >> imm ;
+                reg[rd].second = reg[rs1].second & imm ;
+            }
+            else if(inst == "slli")
+            {
+                reg[rd].second = reg[rs1].second << imm ;
+            }
+            else if(inst == "srli")
+            {
+                unsigned int unsignedImm = static_cast<unsigned int>(imm);
+                unsigned int unsignedrs1 = static_cast<unsigned int>(reg[rs1].second);
+            reg[rd].second = static_cast<unsigned int> (unsignedrs1 >> unsignedImm );
+            
+            }
+            else if(inst == "srai")
+            {
+            reg[rd].second = reg[rs1].second >> imm ;
+            }
         }
     }
 
