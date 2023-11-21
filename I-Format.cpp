@@ -35,22 +35,18 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, int
     while (instruction >> store) {
                 store.erase(remove(store.begin(), store.end(), ','), store.end());
                 temp.push_back(store);
-                cout << store << endl;
             }
     if(!offset){
         
 	    for (size_t i = 0; i < reg.size(); ++i) {
 		    if (reg[i].first == temp[0]) {
 			    rd = i;
-                cout << rd <<endl;
 		    }
 		    if (reg[i].first == temp[1]) {
 			    rs1 = i;
-                cout << rs1 <<endl;
 		    }
 	    }
         imm =  stoi(temp[2]);
-        cout << imm << endl;
     }
     else{
         string immediate, source;
@@ -79,7 +75,6 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, int
             reg[rd].second = pc + 4;
             pc = reg[rs1].second + imm;
             pc_changed = true;
-            cout << pc << "pc\n";
         }
         else if(inst == "lh")
         {

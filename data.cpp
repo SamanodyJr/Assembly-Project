@@ -172,10 +172,10 @@ void check_format(string inst, string inst_rest, vector<pair<string, int> > &reg
 	{
 		IFormat(inst, inst_rest, reg, pc, pc_changed,  memory, err, offset);
 	}
-	// else if(SFormatChecker(inst))
-	// {
-	// 	SFormat(inst, inst_rest, reg,  memory, err);
-	// }
+	else if(SFormatChecker(inst))
+	{
+		SFormat(inst, inst_rest, reg,  memory, err);
+	}
 	else
 		cout << "not defined yet bas hi\n";
    

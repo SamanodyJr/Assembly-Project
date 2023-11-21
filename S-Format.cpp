@@ -43,11 +43,12 @@ void SFormat(string inst, string inst_rest, vector<pair<string, int> > &reg , ma
         }
         else if(inst == "sh")
         {
-
+            memory[reg[rs1].second + imm] = reg[rs2].second & 0XFFFF;
+            cout << memory[reg[rs1].second + imm];
         }
         else if(inst == "sb")
         {
-
+            memory[reg[rs1].second + imm] = reg[rs2].second & 0XFF;
         }
     }
 }
