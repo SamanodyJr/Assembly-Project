@@ -1,4 +1,7 @@
 fact:
+      addi  t0, t0, -355
+      srli  t1, t0, 3
+      lb    t1, 0(t0)
       addi  sp, sp, -8 # adjust stack for 2 items
       sw    ra, 4(sp) # save return address
       sw    a0, 0(sp) # save argument
