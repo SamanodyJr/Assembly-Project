@@ -24,7 +24,6 @@ void BFormat(string inst, string inst_rest, vector<pair<string, long long int> >
 	{
 		store.erase(remove(store.begin(), store.end(), ','), store.end());
 		temp.push_back(store);
-		cout << store << endl;
 	}
 
 	for (size_t i = 0; i < reg.size(); ++i)

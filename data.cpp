@@ -3,9 +3,9 @@
 #include <fstream>
 #include <map>
 #include "data.hpp"
-#include "R-Format.cpp"
-#include "I-Format.cpp"
-#include "S-Format.cpp"
+#include "R-Format.hpp"
+#include "I-Format.hpp"
+#include "S-Format.hpp"
 
 using namespace std;
 // C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm

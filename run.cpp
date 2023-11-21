@@ -5,7 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <map>
-#include "data.cpp"
+#include "data.hpp"
 
 
 using namespace std;
