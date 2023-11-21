@@ -1,139 +1,170 @@
-//#include <iostream>
-//#include <vector>
-//#include <string>
-//#include <sstream>
-//#include <map>
-//#include "I-Format.hpp"
-//
-//using namespace std;
-//
-//bool IFormatChecker(string inst, bool &offset)
-//{
-//    if( inst == "addi" || inst == "slti" || inst == "sltiu" || inst == "xori" || inst == "ori" || inst == "andi"|| inst == "slli" || inst == "srli" || inst == "srai" )
-//    {
-//        offset = false;
-//        return true;
-//    }
-//    else if (inst == "jalr" || inst == "lb" || inst == "lh" || inst == "lw" || inst == "lbu" || inst == "lhu" )
-//    {
-//        offset = true;
-//        return false;
-//    }
-//        
-//}
-//
-//void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, bool &pc_changed , map< int , int > &memory, bool &err)
-//{
-//    int rd = -1, rs1 = -1, imm;
-//    bool imm_flag;
-//    stringstream instruction(inst_rest);
-//    
-//    string store;
-//    vector <string> temp;
-//        while (instruction >> store) {
-//                store.erase(remove(store.begin(), store.end(), ','), store.end());
-//                store.erase(remove(store.begin(), store.end(), ' '), store.end());
-//                temp.push_back(store);
-//                cout << store << endl;
-//            }
-//	for (size_t i = 0; i < reg.size(); ++i) {
-//		if (reg[i].first == temp[0]) {
-//			rd = i;
-//		}
-//		else if (reg[i].first == temp[1]) {
-//			rs1 = i;
-//		}
-//        imm_flag = all_of(temp[2].begin(), temp[2].end(), ::isdigit);
-//		if(imm_flag)
-//		    imm =  stoi(temp[2]);
-//	}
-//	if (rd == -1 || rs1 == -1 || !imm_flag ) {
-//		cout << "Invalid entries." << endl;
-//	}
-//	else
-//	{
-//        if(inst == "jalr")
-//        {
-//            rd = pc + 4;
-//            pc = rs1 + imm;
-//            pc_changed = true;
-//
-//        }
-//        else if(inst == "lb")
-//        {
-//            if(memory.find(rs1+imm) != memory.end())
-//                rd = memory[rs1+imm];
-//            else
-//            {
-//                "memory location not found please make sure it is initialized \n";
-//            }
-//        }
-//        else if(inst == "lw")
-//        {
-//            rd = memory[rs1+imm];
-//        }
-//        else if(inst == "lbu")
-//        {
-//            /* code */
-//        }
-//        else if(inst == "lhu")
-//        {
-//            /* code */
-//        }
-//        else if(inst == "addi")
-//        {
-//            rd = rs1 + imm;
-//        }
-//        else if(inst == "slti")
-//        {
-//            if( rs1 < imm)
-//                rd = 1;
-//            else
-//                rd = 0;
-//
-//        }
-//        else if(inst == "sltiu")
-//        {
-//            if ( rs1 >= 0 && imm>=0)
-//				if(rs1 < imm)
-//					rd = 1;
-//				else
-//					rd = 0;
-//			else if(rs1 >= 0 && imm < 0)
-//				rd = 1;
-//			else if (rs1 < 0 && imm < 0)
-//				if (rs1 < imm)
-//					rd = 1;
-//				else
-//					rd = 0;
-//			else if (rs1 < 0 && imm >= 0)
-//				rd = 0;
-//        }
-//        else if(inst == "xori")
-//        {
-//            rd = rs1 ^ imm ;
-//        }
-//        else if(inst == "ori")
-//        {
-//            rd = rs1 | imm ;
-//        }
-//        else if(inst == "andi")
-//        {
-//            rd = rs1 & imm ;
-//        }
-//        else if(inst == "slli")
-//        {
-//            rd = rs1 << imm ;
-//        }
-//        else if(inst == "srli")
-//        {
-//            /* code */
-//        }
-//        else if(inst == "srai")
-//        {
-//            /* code */
-//        }
-//    }
-//
-//    return;
-//}
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <map>
+#include "I-Format.hpp"
+
+using namespace std;
+
+bool IFormatChecker(string inst, bool &offset)
+{
+    if( inst == "addi" || inst == "slti" || inst == "sltiu" || inst == "xori" || inst == "ori" || inst == "andi"|| inst == "slli" || inst == "srli" || inst == "srai" )
+    {
+        offset = false;
+        return true;
+    }
+    else if (inst == "jalr" || inst == "lb" || inst == "lh" || inst == "lw" || inst == "lbu" || inst == "lhu" )
+    {
+        offset = true;
+        return true;
+    }
+    else
+        return false;  
+}
+
+void IFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int &pc, bool &pc_changed , map< int , int > &memory, bool &err, bool &offset)
+{
+    int rd = -1, rs1 = -1, imm;
+    
+    stringstream instruction(inst_rest);
+    
+    string store;
+    vector <string> temp;
+    while (instruction >> store) {
+                store.erase(remove(store.begin(), store.end(), ','), store.end());
+                temp.push_back(store);
+                cout << store << endl;
+            }
+    if(!offset){
+        
+	    for (size_t i = 0; i < reg.size(); ++i) {
+		    if (reg[i].first == temp[0]) {
+			    rd = i;
+                cout << rd <<endl;
+		    }
+		    if (reg[i].first == temp[1]) {
+			    rs1 = i;
+                cout << rs1 <<endl;
+		    }
+	    }
+        imm =  stoi(temp[2]);
+    }
+    else{
+        string immediate, source;
+        extractStrings(temp[1], immediate, source);
+         for (size_t i = 0; i < reg.size(); ++i) {
+		    if (reg[i].first == temp[0]) {
+			    rd = i;
+                cout << rd <<endl;
+		    }
+            if (reg[i].first == source) {
+			    rs1 = i;
+                cout << rs1 <<endl;
+		    }
+         }
+         imm =  stoi(immediate);    
+    }
+	if (rd == -1 || rs1 == -1 ) {
+		cout << "Invalid entries." << endl;
+        err = true;
+	}
+	else
+	{
+        if(inst == "jalr")
+        {
+            reg[rd].second = pc + 4;
+            pc = reg[rs1].second + imm;
+            pc_changed = true;
+            cout << pc << "pc\n";
+        }
+        else if(inst == "lb")
+        {
+        
+        }
+        else if(inst == "lw")
+        {
+            if(memory.find(reg[rs1].second+imm) != memory.end())
+                reg[rd].second = memory[reg[rs1].second+imm];
+            else
+            {
+                "Memory location not found please make sure it is initialized \n";
+                err = true;
+            }        
+        }
+        else if(inst == "lbu")
+        {
+            /* code */
+        }
+        else if(inst == "lhu")
+        {
+            /* code */
+        }
+        else if(inst == "addi")
+        {
+            reg[rd].second = reg[rs1].second + imm;
+        }
+        else if(inst == "slti")
+        {
+            if( reg[rs1].second < imm)
+                reg[rd].second = 1;
+            else
+                reg[rd].second = 0;
+
+        }
+        else if(inst == "sltiu")
+        {
+            if ( reg[rs1].second >= 0 && imm>=0)
+				if(reg[rs1].second < imm)
+					reg[rd].second = 1;
+				else
+					reg[rd].second = 0;
+			else if(reg[rs1].second >= 0 && imm < 0)
+				reg[rd].second = 1;
+			else if (reg[rs1].second < 0 && imm < 0)
+				if (reg[rs1].second < imm)
+					reg[rd].second = 1;
+				else
+					reg[rd].second = 0;
+			else if (reg[rs1].second < 0 && imm >= 0)
+				reg[rd].second = 0;
+        }
+        else if(inst == "xori")
+        {
+            reg[rd].second = reg[rs1].second ^ imm ;
+        }
+        else if(inst == "ori")
+        {
+            reg[rd].second = reg[rs1].second | imm ;
+        }
+        else if(inst == "andi")
+        {
+            reg[rd].second = reg[rs1].second & imm ;
+        }
+        else if(inst == "slli")
+        {
+            reg[rd].second = reg[rs1].second << imm ;
+        }
+        else if(inst == "srli")
+        {
+            unsigned int unsignedImm = static_cast<unsigned int>(imm);
+            unsigned int unsignedrs1 = static_cast<unsigned int>(reg[rs1].second);
+           reg[rd].second = unsignedrs1 >> unsignedImm ;
+        }
+        else if(inst == "srai")
+        {
+            reg[rd].second = reg[rs1].second >> imm ;
+        }
+    }
+
+    return;
+}
+void extractStrings(string input, string& beforeParentheses, string& withinParentheses) {
+    size_t openingParen = input.find('(');
+    size_t closingParen = input.find(')');
+    
+    if (openingParen != string::npos && closingParen != string::npos && openingParen < closingParen) {
+        beforeParentheses = input.substr(0, openingParen);
+        withinParentheses = input.substr(openingParen + 1, closingParen - openingParen - 1);
+    } 
+}

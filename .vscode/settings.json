@@ -7,6 +7,9 @@
         "filesystem": "cpp",
         "map": "cpp",
         "vector": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "ostream": "cpp",
+        "string_view": "cpp",
+        "*.tcc": "cpp"
     }
 }

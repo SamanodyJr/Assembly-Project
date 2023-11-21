@@ -6,8 +6,8 @@
 #include <algorithm>
 #include <map>
 #include "data.cpp"
-// #include "R-Format.cpp"
-// #include "I-Format.cpp"
+#include "R-Format.cpp"
+#include "I-Format.cpp"
 
 using namespace std;
 

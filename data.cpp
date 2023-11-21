@@ -5,6 +5,7 @@
 #include "data.hpp"
 #include "R-Format.cpp"
 #include "I-Format.cpp"
+#include "S-Format.cpp"
 
 using namespace std;
 // C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
@@ -14,7 +15,7 @@ void assembler()
 	int ans(1);
 	string filepath;
 	vector<pair<string, int> > reg;
-	reg.push_back(make_pair("Zero", 0)); reg.push_back(make_pair("ra", 0)); reg.push_back(make_pair("sp", 34359672828));
+	reg.push_back(make_pair("zero", 0)); reg.push_back(make_pair("ra", 0)); reg.push_back(make_pair("sp", 34359672828));
 	reg.push_back(make_pair("gp", 268468224)); reg.push_back(make_pair("tp", 0)); reg.push_back(make_pair("t0", 0));
 	reg.push_back(make_pair("t1", 0)); reg.push_back(make_pair("t2", 0)); reg.push_back(make_pair("s0", 0));
 	reg.push_back(make_pair("s1", 0)); reg.push_back(make_pair("a0", 0)); reg.push_back(make_pair("a1", 0));
@@ -84,10 +85,14 @@ void assembler()
 		int startpc(pc);
 		bool pc_changed(false), err(false);
 
+		
+		do{
+			string lowCAPinst(instructions[pc]);
+			for(int i = 0; i < lowCAPinst.length(); i++)
+				tolower(lowCAPinst[i]);
 
-		do {
-			stringstream instruction(instructions[pc]);
-			string store;
+			stringstream instruction(lowCAPinst);
+        	string store;
 			string temp;
 
 
@@ -96,11 +101,14 @@ void assembler()
 			}
 
 			string concat;
-			concat = instructions[pc];
-			int i = concat.find(temp);
-			concat.erase(i, temp.length());
+        	concat = lowCAPinst;
+        	int i = concat.find(temp);
+        	concat.erase(i,temp.length());
 			removeLeadingSpacesAndTabs(concat);
-			check_format(temp, concat, reg, pc, memory, pc_changed, err);
+			concat.erase(remove(concat.begin(), concat.end(), ' '), concat.end());
+			AddSpaces(concat);
+			cout << concat << endl;
+        	check_format(temp, concat, reg, pc, memory, pc_changed, err);
 
 			if (!pc_changed)
 				pc += 4;
@@ -132,20 +140,36 @@ void check_format(string inst, string inst_rest, vector<pair<string, int> > reg,
 {
 	pc_changed = false;
 	err = false;
+	bool offset;
 	// if(RFormatChecker(inst))
 	// {
 	// 	//RFormat(inst, inst_rest, reg);
 	// }
-	// else 
-	// if(IFormatChecker(inst))
-	// {
-	// 	IFormat(inst, inst_rest, reg, pc, pc_changed,  memory, err);
-	// }
-	// else
-	cout << "not defined yet bas hi\n";
-
-};
-
+	
+	cout << inst << endl;
+	if(IFormatChecker(inst, offset))
+	{
+		IFormat(inst, inst_rest, reg, pc, pc_changed,  memory, err, offset);
+	}
+	else if(SFormatChecker(inst))
+	{
+		SFormat(inst, inst_rest, reg,  memory, err);
+	}
+	else
+		cout << "not defined yet bas hi\n";
+   
+}
+void AddSpaces(string& input) {
+    string result;
+    for (char c : input) {
+        if (c == ',') {
+            result += ", "; // Insert space before and after the comma
+        } else {
+            result += c; // Keep other characters unchanged
+        }
+    }
+    input = result; // Update the original string
+}
 string removing_comments(string line)
 {
 	string new_line;
@@ -246,5 +270,5 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 		cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
 	}
 
-	return end;
+	returnï¿½end;
 }
