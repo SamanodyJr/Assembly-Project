@@ -11,12 +11,12 @@ using namespace std;
 // C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
 void assembler()
 {
-	long long int pc;
+	int pc;
 	int ans(1);
 	string filepath;
-	vector<pair<string, long long int> > reg;
-	reg.push_back(make_pair("zero", 0)); reg.push_back(make_pair("ra", 0)); reg.push_back(make_pair("sp", 34359672828));
-	reg.push_back(make_pair("gp", 268468224)); reg.push_back(make_pair("tp", 0)); reg.push_back(make_pair("t0", 0));
+	vector<pair<string, int> > reg;
+	reg.push_back(make_pair("zero", 0)); reg.push_back(make_pair("ra", 0)); reg.push_back(make_pair("sp", 1500000000));
+	reg.push_back(make_pair("gp", 2000000000)); reg.push_back(make_pair("tp", 0)); reg.push_back(make_pair("t0", 0));
 	reg.push_back(make_pair("t1", 0)); reg.push_back(make_pair("t2", 0)); reg.push_back(make_pair("s0", 0));
 	reg.push_back(make_pair("s1", 0)); reg.push_back(make_pair("a0", 0)); reg.push_back(make_pair("a1", 0));
 	reg.push_back(make_pair("a2", 0)); reg.push_back(make_pair("a3", 0)); reg.push_back(make_pair("a4", 0));
@@ -44,11 +44,11 @@ void assembler()
 
 	if (ans == 1)
 	{
-		map < long long int, long long int > memory;
-		map < long long int, string> instructions;
-		map < string, long long int> labels;
-		long long int end;
-		long long int memadd, memvalue; //initializing data memory if user wants
+		map < int, int > memory;
+		map < int, string> instructions;
+		map < string, int> labels;
+		int end;
+		int memadd, memvalue; //initializing data memory if user wants
 		string mem;//flag to know if they want to initialize their data memory
 
 		cout << "enter your file path\n";
@@ -82,7 +82,7 @@ void assembler()
 			cout << "Address: " << pair.first << ", Value: " << pair.second << endl;
 		}
 
-		long long int startpc(pc);
+		int startpc(pc);
 		bool pc_changed(false), err(false);
 		char nextinst;
 
@@ -158,7 +158,7 @@ void removeLeadingSpacesAndTabs(string& input) {
 	}
 }
 
-void check_format(string inst, string inst_rest, vector<pair<string, long long int> > &reg, long long int& pc, map <long long int,  long long int>& memory, bool& pc_changed, bool& err) // name , string
+void check_format(string inst, string inst_rest, vector<pair<string, int> > &reg, int& pc, map <int,  int>& memory, bool& pc_changed, bool& err) // name , string
 {
 	pc_changed = false;
 	err = false;
@@ -227,7 +227,7 @@ string storing_label(string line)
 	else
 		return line;
 }
-long long int Intializing_Data(string filepath, long long int pc, map< long long int, string>& instructions, map<string, long long int>& labels)
+int Intializing_Data(string filepath, int pc, map< int, string>& instructions, map<string, int>& labels)
 {
 	//C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
 
@@ -280,7 +280,7 @@ long long int Intializing_Data(string filepath, long long int pc, map< long long
 
 	}
 	input.close();
-	long long int end = pc;
+	int end = pc;
 
 	cout << " label\n";
 	for (const auto& pair : labels) {

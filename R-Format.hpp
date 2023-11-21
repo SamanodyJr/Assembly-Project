@@ -7,7 +7,7 @@
 using namespace std;
 
 bool RFormatChecker(string inst);
-void RFormat(string inst, string inst_rest, vector<pair<string, long long int> > &reg, bool err);
+void RFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, bool err);
 
 
 #endif 

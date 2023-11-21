@@ -7,7 +7,7 @@ bool SFormatChecker(string inst){
     else 
         return false;
 }
-void SFormat(string inst, string inst_rest, vector<pair<string, long long int> > &reg , map< long long int , long long int >  &memory, bool &err){
+void SFormat(string inst, string inst_rest, vector<pair<string, int> > &reg , map< int , int >  &memory, bool &err){
     int rs1 = -1, rs2 = -1, imm;
     stringstream instruction(inst_rest);
     

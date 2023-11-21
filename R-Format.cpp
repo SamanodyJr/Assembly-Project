@@ -10,7 +10,7 @@ bool RFormatChecker(string inst)
 	return false;
 }
 
-void RFormat(string inst, string inst_rest, vector<pair<string, long long int> > &reg, bool err)
+void RFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, bool err)
 {
 	
 	int d = -1, s1 = -1, s2 = -1;

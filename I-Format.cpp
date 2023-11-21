@@ -23,10 +23,10 @@ bool IFormatChecker(string inst, bool &offset)
         return false;  
 }
 
-void IFormat(string inst, string inst_rest, vector<pair<string, long long int> > &reg, long long int &pc, bool &pc_changed , map< long long int , long long int > &memory, bool &err, bool &offset)
+void IFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, int &pc, bool &pc_changed , map< int , int > &memory, bool &err, bool &offset)
 {
     int rd = -1, rs1 = -1;
-    long long int imm;
+    int imm;
     
     stringstream instruction(inst_rest);
     
@@ -210,7 +210,7 @@ void IFormat(string inst, string inst_rest, vector<pair<string, long long int> >
         {
             unsigned int unsignedImm = static_cast<unsigned int>(imm);
             unsigned int unsignedrs1 = static_cast<unsigned int>(reg[rs1].second);
-           reg[rd].second = static_cast<unsigned long long int> (unsignedrs1 >> unsignedImm );
+           reg[rd].second = static_cast<unsigned int> (unsignedrs1 >> unsignedImm );
         
         }
         else if(inst == "srai")
