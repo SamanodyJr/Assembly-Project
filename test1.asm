@@ -9,32 +9,37 @@ main:
 	sw s5, 0(s4)
 	lui a0, 15
 	auipc t6, 4090
-	jal ra, L1
 	addi a7, zero, -50
 	sw a7, 4(s3)
+	jal ra, L3
+	
 L2:
-	beq s5, a0, L5
-	bne s5, a0, L4
-	bltu s5, a0, L3
-	bgeu s5, a0, L6
 	sub s5, s5, a0
+	beq s4, a0, L5
+	blt t6, zero, L2
+	bne a0, a0, L4
+	bltu a0, a0, L3
+	bge t1, a0, L6
+	
 	
 L3:
 	lb t0, 0(s4)
 	lh t1, 0(s4)
 	sb t1, 0(s4)
 	sh a0, 0(s3)
-	bge t1, a0, L2
+	bne s5, a0, L5
+
 L4:
 	slti t6, t0, 10
 	sltu tp, t4, t2
-	bge t6, zero, L2
 	sltiu t6, t0, 10
 	slli t6, t6, 31
 	ori t6, t6, 1
 	lbu a5, 4(s3)
 	lhu a6, 4(s3)
-	blt t6, zero, L2
+	bgeu a0, a0, L2
+
+
 L5:
 	andi s5, s5, 0
 	and s1, s5, a0
@@ -46,8 +51,9 @@ L5:
 	sra a3, a2, a1
 	srai a4, a2, 5
 	or t3, s5, s5
+	bge t6, zero, L4
 L6:
 	add s0, zero, s5
 	slt s0, s0, a0
-	jalr zero, ra
+	jalr zero, 0(ra)
 	ecall

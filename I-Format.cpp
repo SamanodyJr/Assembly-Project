@@ -155,9 +155,7 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, int
             }
             else if(inst == "addi")
             {
-                cout << reg[rs1].second + imm << "sum\n";
                 reg[rd].second = reg[rs1].second + imm;
-                cout << reg[rd].second;
             }
             else if(inst == "slti")
             {

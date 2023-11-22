@@ -8,6 +8,7 @@
 #include "S-Format.cpp"
 #include "B-Format.cpp"
 #include "J-Format.cpp"
+#include "U-Format.cpp"
 
 using namespace std;
 // C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
@@ -110,7 +111,7 @@ void assembler()
 			string temp;
 
 			
-			
+
 			if (instruction >> store) {
 				temp = store;
 			}
@@ -211,7 +212,6 @@ void check_format(string inst, string inst_rest, vector<pair<string, int> > &reg
 	pc_changed = false;
 	err = false;
 	bool offset;
-	cout << inst << endl;
 	if(RFormatChecker(inst))
 	{
 		RFormat(inst, inst_rest, reg, err);
@@ -219,6 +219,10 @@ void check_format(string inst, string inst_rest, vector<pair<string, int> > &reg
 	else if(IFormatChecker(inst, offset))
 	{
 		IFormat(inst, inst_rest, reg, pc, pc_changed,  memory, err, offset);
+	}
+	else if(UFormatChecker(inst))
+	{
+		UFormat(inst, inst_rest, reg, pc, memory, err );
 	}
 	else if(SFormatChecker(inst))
 	{
@@ -323,6 +327,8 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 				label += line[i];
 				i++;
 			}
+			for(int i = 0 ; i < line.length(); i++)
+				label[i] = tolower(label[i]);
 			labels[label] = pc;
 			getline(input, line);
 			while(line.empty())
@@ -346,6 +352,8 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 				label = storing_label(line);
 				if (label != line)
 				{
+					for(int i = 0 ; i < line.length(); i++)
+						label[i] = tolower(label[i]);
 					labels[label] = pc + 4;
 				}
 				else
@@ -376,6 +384,8 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 				label = storing_label(line);
 				if (label != line)
 				{
+					for(int i = 0 ; i < line.length(); i++)
+						label[i] = tolower(label[i]);
 					labels[label] = pc + 4;
 				}
 				else
@@ -392,14 +402,14 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 	input.close();
 	int end = pc;
 
-	cout << " label\n";
-	for (const auto& pair : labels) {
-		cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
-	}
-	cout << " instructions\n";
-	for (const auto& pair : instructions) {
-		cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
-	}
+	// cout << " label\n";
+	// for (const auto& pair : labels) {
+	// 	cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
+	// }
+	// cout << " instructions\n";
+	// for (const auto& pair : instructions) {
+	// 	cout << "Key: " << pair.first << ", Value: " << pair.second << endl;
+	// }
 
 	return end;
 }

@@ -34,11 +34,11 @@ void UFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
         {
             if(inst == "lui")
             {
-                reg[rd].second = imm << 12;
+                reg[rd].second = (imm >> 12);
             }
             else if(inst == "auipc")
             {
-                reg[rd].second = pc + (imm << 12);
+                reg[rd].second = pc + (imm >> 12);
             }
         }
     }

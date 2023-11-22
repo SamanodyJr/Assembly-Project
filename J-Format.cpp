@@ -33,8 +33,9 @@ void JFormat(string inst, string inst_rest, vector<pair<string, int> >& reg, boo
 			d = i;
 		}
 	}
+	cout << "label: "<< temp[1] ;
 	l = temp[1];
-	if (l == "" || d == -1)
+	if ( d == -1)
 	{
 		cout << "Invalid entries." << endl;
 		err = true;

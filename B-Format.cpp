@@ -103,7 +103,7 @@ void BFormat(string inst, string inst_rest, vector<pair<string, int> >& reg, boo
 		else if (inst == "bgeu")
 		{
 			if (reg[s1].second >= 0 && reg[s2].second >= 0)
-				if (reg[s1].second > reg[s2].second)
+				if (reg[s1].second >= reg[s2].second)
 				{
 					pc = labels[l];
 					pc_changed = true;
@@ -114,7 +114,7 @@ void BFormat(string inst, string inst_rest, vector<pair<string, int> >& reg, boo
 					pc_changed = true;
 				}
 				else if (reg[s1].second < 0 && reg[s2].second < 0)
-					if (reg[s1].second > reg[s2].second)
+					if (reg[s1].second >= reg[s2].second)
 					{
 						pc = labels[l];
 						pc_changed = true;

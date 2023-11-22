@@ -1,4 +1,4 @@
-addi t0,t0, 10
+addi a0,a0, 10
 addi t1,t1, 6
 sub t2, t0, t1
 and t3, t0, t1
