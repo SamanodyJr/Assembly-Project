@@ -7,6 +7,7 @@
 #include "I-Format.cpp"
 #include "S-Format.cpp"
 #include "B-Format.cpp"
+#include "J-Format.cpp"
 
 using namespace std;
 // C:\Users\noury\OneDrive\Documents\Assembly\Project1\Assembly-Project\input.asm
@@ -48,6 +49,7 @@ void assembler()
 		map < int, int > memory;
 		map < int, string> instructions;
 		map < string, int> labels;
+		char base('d');
 		int end;
 		int memadd, memvalue; //initializing data memory if user wants
 		string mem;//flag to know if they want to initialize their data memory
@@ -59,6 +61,14 @@ void assembler()
 		cin >> pc;
 
 		end = Intializing_Data(filepath, pc, instructions, labels);
+
+		cout << "choose how you want to view your data b: binary, d:decimal , h:hexadecimal  \n";
+		cin >> base;
+		while(base != 'b' && base != 'd' && base != 'h')
+		{
+			cout << "invalid value, please choose b: binary, d:decimal , h:hexadecimal  \n";
+			cin >> base;
+		}
 
 		cout << "Do you want to initialize your memory ? yes/Yes \n";
 		cin >> mem;
@@ -76,12 +86,12 @@ void assembler()
 			cin >> mem;
 		}
 
-		cout << " memory\n";
+		// cout << " memory\n";
 
-		for (const auto& pair : memory)
-		{
-			cout << "Address: " << pair.first << ", Value: " << pair.second << endl;
-		}
+		// for (const auto& pair : memory)
+		// {
+		// 	cout << "Address: " << pair.first << ", Value: " << pair.second << endl;
+		// }
 
 		int startpc(pc);
 		bool pc_changed(false), err(false);
@@ -92,12 +102,14 @@ void assembler()
 			
 			string lowCAPinst(instructions[pc]);
 			for(int i = 0; i < lowCAPinst.length(); i++)
-				tolower(lowCAPinst[i]);
-
+			{
+				lowCAPinst[i] = tolower(lowCAPinst[i]);
+			}	
 			stringstream instruction(lowCAPinst);
         	string store;
 			string temp;
 
+			
 			
 			if (instruction >> store) {
 				temp = store;
@@ -110,12 +122,10 @@ void assembler()
 			removeLeadingSpacesAndTabs(concat);
 			concat.erase(remove(concat.begin(), concat.end(), ' '), concat.end());
 			AddSpaces(concat);
-			//cout << concat << endl;
 			cout <<"Instruction: " << instructions[pc] <<endl ;
         	check_format(temp, concat, reg, pc, memory, pc_changed, err, labels);
 			
 			
-
 			if (!pc_changed)
 				pc += 4;
 
@@ -124,22 +134,56 @@ void assembler()
 				cout << "encountered problem with your asm instructions\n";
 				break;
 			}
-			//displaying
-			
+			string binary1, binary2;
 			cout << "\n\nMemory: \n" ;
 			if(memory.empty())
 				cout << "Memory has not been accessed yet!\n";
 			else
-				for (const auto& pair : memory)
-				{
-				cout << "Address: " << pair.first << ", Value: " << pair.second << endl;
-				}
+			{	
+   
+				if(base == 'd')
+					for (const auto& pair : memory)
+					{
+						
+					cout << "Address: " << pair.first << ", Value: " << pair.second << endl;
+					}
+				else if(base == 'b')
+					for (const auto& pair : memory)
+					{
+						binary1 = bitset<32>(pair.first).to_string();
+						binary2 = bitset<32>(pair.second).to_string();
+						cout << "Address: " << binary1 << ", Value: " <<  binary2 << endl;
+					}
+				else
+					for (const auto& pair : memory)
+					{
+						cout << "Address: ";
+						printf("%#.8x", pair.first);
+					 	cout << ", Value: " ;
+						printf("%#.8x", pair.second);
+					}
+
+			}
+				
 			
 			cout << "\n\n Registers: \n";
 			cout <<"Name\tNumber\tValue\n";
-			for (int i = 0; i < reg.size(); ++i) {
-        		cout  << reg[i].first<< "\t" << i << "\t" <<reg[i].second << endl;
-    		}
+			if(base == 'd')
+				for (int i = 0; i < reg.size(); ++i) {
+				cout  << reg[i].first<< "\t" << i << "\t" <<reg[i].second << endl;
+				}
+			else if(base == 'b')
+				for (int i = 0; i < reg.size(); ++i) {
+					binary1 = bitset<32>(reg[i].second).to_string();
+					cout  << reg[i].first<< "\t" << i << "\t" << binary1 << endl;
+				}
+			else
+				for (int i = 0; i < reg.size(); ++i) {
+					cout  << reg[i].first<< "\t" << i << "\t" ;
+					printf("%#.8x", reg[i].second);
+					cout << endl;
+    			}
+			
 
 			cout << "Current PC:" << pc << endl;
 
@@ -184,8 +228,20 @@ void check_format(string inst, string inst_rest, vector<pair<string, int> > &reg
 	{
 		BFormat(inst, inst_rest, reg, err, labels, pc, pc_changed);
 	}
+	else if(JFormatChecker(inst))
+	{
+		JFormat(inst, inst_rest, reg, err, labels, pc, pc_changed);
+	}
+	else if(inst == "ecall" || inst == "ebreak" || inst == "fence")
+	{
+		cout << "\nProgram Terminated\n";
+		exit(1);
+	}
 	else
-		cout << "not defined yet bas hi\n";
+	{
+		cout << "invalid instruction used\n";
+		err = true;
+	}	
    
 }
 void AddSpaces(string& input) {
@@ -247,6 +303,12 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 	if (input.is_open())
 	{
 		getline(input, line);
+		while(line.empty())
+		{
+			getline(input, line);
+		}
+		removeLeadingSpacesAndTabs(line);
+
 		if (line[0] == '#' || line == "")
 		{
 			getline(input, line);
@@ -263,14 +325,24 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 			}
 			labels[label] = pc;
 			getline(input, line);
+			while(line.empty())
+			{
+				getline(input, line);
+			}
 			line = removing_comments(line);
 			removeLeadingSpacesAndTabs(line);
 			instructions[pc] = line;
 			while (!input.eof())
 			{
+				
 				label = "";
 				getline(input, line);
+				while(line.empty())
+				{
+					getline(input, line);
+				}
 				line = removing_comments(line);
+
 				label = storing_label(line);
 				if (label != line)
 				{
@@ -286,14 +358,20 @@ int Intializing_Data(string filepath, int pc, map< int, string>& instructions, m
 			}
 		}
 		else
-		{
+		{	
+			
 			line = removing_comments(line);
 			removeLeadingSpacesAndTabs(line);
 			instructions[pc] = line;
 			while (!input.eof())
 			{
+				
 				label = "";
 				getline(input, line);
+				while (line.empty())
+				{
+					getline(input, line);
+				}
 				line = removing_comments(line);
 				label = storing_label(line);
 				if (label != line)

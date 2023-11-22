@@ -16,18 +16,15 @@ void SFormat(string inst, string inst_rest, vector<pair<string, int> > &reg , ma
     while (instruction >> store) {
                 store.erase(remove(store.begin(), store.end(), ','), store.end());
                 temp.push_back(store);
-                cout << store << endl;
             }
     string immediate, source;
     SextractStrings(temp[1], immediate, source);
     for (size_t i = 0; i < reg.size(); ++i) {
         if (reg[i].first == temp[0]) {
             rs2 = i;
-            cout << rs2 <<endl;
         }
         if (reg[i].first == source) {
             rs1 = i;
-            cout << rs1 <<endl;
 	    }
     }
     imm =  stoi(immediate);
@@ -38,13 +35,13 @@ void SFormat(string inst, string inst_rest, vector<pair<string, int> > &reg , ma
 	else
 	{
         if(inst == "sw")
-        {
-            memory[reg[rs1].second + imm] = reg[rs2].second;
+        {   
+                memory[reg[rs1].second + imm] = reg[rs2].second;
+
         }
         else if(inst == "sh")
         {
             memory[reg[rs1].second + imm] = reg[rs2].second & 0XFFFF;
-            cout << memory[reg[rs1].second + imm];
         }
         else if(inst == "sb")
         {

@@ -54,15 +54,12 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, int
          for (size_t i = 0; i < reg.size(); ++i) {
 		    if (reg[i].first == temp[0]) {
 			    rd = i;
-                cout << rd <<endl;
 		    }
             if (reg[i].first == source) {
 			    rs1 = i;
-                cout << rs1 <<endl;
 		    }
          }
          imm =  stoi(immediate);  
-         cout << imm <<endl;  
     }
 	if (rd == -1 || rs1 == -1 ) {
 		cout << "Invalid entries." << endl;
@@ -207,7 +204,7 @@ void IFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, int
             {
                 unsigned int unsignedImm = static_cast<unsigned int>(imm);
                 unsigned int unsignedrs1 = static_cast<unsigned int>(reg[rs1].second);
-            reg[rd].second = static_cast<unsigned int> (unsignedrs1 >> unsignedImm );
+                reg[rd].second = static_cast<unsigned int> (unsignedrs1 >> unsignedImm );
             
             }
             else if(inst == "srai")

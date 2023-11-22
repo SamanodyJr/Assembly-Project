@@ -5,7 +5,7 @@
 using namespace std;
 bool RFormatChecker(string inst)
 {
-	if (inst == "add" || inst == "sub" || inst == "and" || inst == "or" || inst == "xor" || inst == "sll" || inst == "srl" || inst == "sra" || inst == "slt" || inst == "sltu")
+	if (inst == "add" || inst == "sub" || inst == "and" || inst == "or" || inst == "xor" || inst == "sll" || inst == "srl" || inst == "sra" || inst == "slt" || inst == "sltu" || inst =="mulh" || inst =="mul")
 		return true;
 	return false;
 }
@@ -86,6 +86,16 @@ void RFormat(string inst, string inst_rest, vector<pair<string, int> > &reg, boo
 						reg[d].second = 0;
 				else if (reg[s1].second < 0 && reg[s2].second >= 0)
 					reg[d].second = 0;
+			}
+			else if (inst == "mul")
+			{
+				reg[d].second = reg[s1].second * reg[s2].second;
+			}
+			else if (inst == "mulh")
+			{
+				//long int x = static_cast<unsigned int>(reg[s1].second) * static_cast<unsigned int>(reg[s2].second);	
+				long int x = (long int) reg[s1].second * reg[s2].second;
+				reg[d].second = x >> 32;
 			}
 		}
 	}

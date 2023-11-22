@@ -17,12 +17,10 @@ void UFormat(string inst, string inst_rest, vector<pair<string, int> > reg, int 
         while (instruction >> store) {
                     store.erase(remove(store.begin(), store.end(), ','), store.end());
                     temp.push_back(store);
-                    cout << store << endl;
         }
     for (size_t i = 0; i < reg.size(); ++i) {
         if (reg[i].first == temp[0]) {
             rd = i;
-            cout << rd <<endl;
         }
     }
     imm =  stoi(temp[1]);

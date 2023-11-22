@@ -1,5 +1,7 @@
 fact:
-      addi  sp, sp, -8 # adjust stack for 2 items
+      addi  t1, zero, -3 # adjust stack for 2 items
+      addi  t2, zero,  2
+      mulhu   t3,t1,t2
       sw    ra, 4(sp) # save return address
       sw    a0, 0(sp) # save argument
       slti  t0,a0,1 # test for n < 1
